@@ -1,141 +1,6 @@
 /**
- * Definition d'une classe javascript représentant un canvas SVG
- * @param {JQueryObject} ref Référence à l'objet jquery
- */
-function SVGClass(ref) {
-  this.ref = ref;
-  this.width = this.ref.attr("width");
-  this.height = this.ref.attr("height");
-  this.cote_min = Math.min(this.width, this.height);
-  this.x_centre = this.width / 2;
-  this.y_centre = this.height / 2;
-}
-
-
-
-/**
- * Definition d'une classe représentant un cercle
- * @param {int} xc     x du centre
- * @param {int} yc     y du centre
- * @param {int} radius Rayon du cercle
- * @param {int} hid  parent; sibling; children; current
- */
-function Circle(xc, yc, radius, hid) {
-  this.xc = xc;
-  this.yc = yc;
-  this.radius = radius;
-  this.hid = hid;
-
-  /**
-   * Est ce que le point passé en parametre est contenu dans le cercle ?
-   * @param  {int} x     Abscisse du point à tester
-   * @param  {int} y     Ordonnée du point à tester
-   * @param  int} scale  Permet de mettre à l'echelle le rayon en retranchant ou ajoutant une somme
-   * @return {boolean}       Vrai ou faux
-   */
-  this.contains = function(x, y, scale) {
-    var rad = this.radius + scale;
-    square_dist = Math.pow((this.xc - x), 2) + Math.pow((this.yc - y), 2);
-    return (square_dist <= Math.pow(rad, 2));
-  };
-
-  /**
-   * Fonction qui gère la couleur des cercles en fonction de leur grade
-   * hieratchique
-   * @return {String} La couleur
-   */
-  this.getFillcolor = function() {
-    if(this.hid === "parent")
-      return "#078E9D";
-    else if(this.hid === "sibling")
-      return "black";
-    else if(this.hid === "children")
-      return "red";
-    else if(this.hid === "current")
-      return "black";
-  };
-
-  /**
-   * @return {float} The fill opacity
-   */
-  this.getFillOpacity = function() {
-    return 1;
-  };
-
-  /**
-   * @return {String} The stroke color
-   */
-  this.getStrokeColor = function() {
-    if(this.hid === "current")
-      return "white";
-    else
-      return "black";
-  };
-
-  /**
-   * @return {int} The stroke width
-   */
-  this.getStrokeWidth = function() {
-    if(this.hid === "children" && nb_children > 70)
-      return 0;
-    else if(this.hid === "current")
-      return 3;
-    else
-      return 1;
-  };
-
-  /**
-   * @return {int} The stroke opacity
-   */
-  this.getStrokeOpacity = function() {
-    if(this.hid === "parent")
-      return 0.6;
-    else
-      return 1;
-  };
-
-  /**
-   * @return {string} The tooltip text
-   */
-  this.getTooltipText = function() {
-    if(this.hid === "parent")
-      return "One of " + nb_parents + " parents";
-    else if(this.hid === "sibling")
-      return "One of " + nb_siblings + " siblings";
-    else if(this.hid === "children")
-      return "One of " + nb_children + " children";
-    else if(this.hid === "current")
-      return "The current object";
-  };
-
-  /**
-   * Fonction qui permet de dessiner le cercle
-   */
-  this.draw = function() {
-    var title = document.createElementNS("http://www.w3.org/2000/svg", "title");
-    title.textContent = this.getTooltipText();
-    var shape = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    shape.setAttributeNS(null, "cx", this.xc);
-    shape.setAttributeNS(null, "cy", this.yc);
-    shape.setAttributeNS(null, "r", this.radius);
-    shape.setAttributeNS(null, "fill", this.getFillcolor());
-    shape.setAttributeNS(null, "fill-opacity", this.getFillOpacity());
-    shape.setAttributeNS(null, "stroke", this.getStrokeColor());
-    shape.setAttributeNS(null, "stroke-width", this.getStrokeWidth());
-    shape.setAttributeNS(null, "stroke-opacity", this.getStrokeOpacity());
-    shape.appendChild(title);
-    document.getElementById('hierarchy').appendChild(shape);
-  };
-}
-
-
-
-
-
-
-
-/**
- * Fonction qui dit si il ya a collision
+ * Fonction qui dit si il ya a collision ou non, en calculant la distance entre
+ * les deux points centraux grâce au théorème de Pythagore
  * @param  {Array}  tab    Tableau contenant l'ensemble des cercles
  * @param  {int}  x_random Abscisse à tester
  * @param  {int}  y_random Ordonnée à tester
@@ -157,7 +22,7 @@ function isCollision(tab, x_random, y_random, rayon) {
 
 /**
  * Fonction qui déssine l'objet courant sous forme de cercle SVG
- * @param  {SVGClass} svg L'objet svg
+ * @param  {CanvasSVG} svg L'objet svg
  * @return {Circle}   Les dimensions du cercle représentant l'objet courant
  */
 function drawCurrentObject(svg) {
@@ -173,7 +38,7 @@ function drawCurrentObject(svg) {
 
 /**
  * Fonction qui dessine les parents sous forme de cercle
- * @param  {SVGClass} svg        L'objet svg
+ * @param  {CanvasSVG} svg        L'objet svg
  * @param  {int} nb_parents Le nombre de parent de l'objet courant
  * @return {Circle}   Le plus petit cercle des parents
  */
@@ -181,10 +46,12 @@ function drawParents(svg, nb_parents) {
   var ecart = 3;
   var parent;
 
+  // cas particulier :
   if(nb_parents === 0) {
     parent = new Circle(svg.x_centre, svg.y_centre, svg.cote_min/2, "parent");
   }
 
+  // boucle de placage 1 à 1 :
   for (var i = 0; i < nb_parents && i < 5; i++) {
     parent = new Circle(svg.x_centre, svg.y_centre, svg.cote_min/2-i*ecart, "parent");
     parent.draw();
@@ -197,7 +64,7 @@ function drawParents(svg, nb_parents) {
 
 /**
  * Fonction qui s'occupe de déssiner les siblings
- * @param  {SVGClass} svg            Le canvas svg
+ * @param  {CanvasSVG} svg            Le canvas svg
  * @param  {int} nb_siblings    Le nombre de siblings à dessiner
  * @param  {Circle} smaller_parent Le cercle représentant le plus petit des parents
  * @param  {Circle} current_object Le cercle représentant l'objet courant
@@ -207,15 +74,20 @@ function drawSiblings(svg, nb_siblings, smaller_parent, current_object) {
   var placer = 0;
   var cpt_colli = 0;
 
+  // boucle qui place les siblings 1 à 1 :
   while(placer < nb_siblings && cpt_colli < 70) {
     var x_random = Math.random() * svg.width;
     var y_random = Math.random()* svg.height;
+
+    // on met la taille des cercles à l'échelle par rapport au canvas :
     var rayon_siblings = 6 + scaleCircleSize(nb_siblings, "sibling");
     rayon_siblings *= Math.min(svg.width, svg.height)/500;
 
+    // si c'est dans la bonne "portion" de cercle :
     if(smaller_parent.contains(x_random, y_random, -rayon_siblings) &&
       !current_object.contains(x_random, y_random, +rayon_siblings) ) {
 
+      // .. et si il n'y a pas de collision avec les autres siblings :
       if( !isCollision(tab_s, x_random, y_random, rayon_siblings) ) {
         var sibling = new Circle(x_random, y_random, rayon_siblings, "sibling");
         sibling.draw();
@@ -283,7 +155,7 @@ function scaleCircleSize(nb, hid) {
 /**
  * Fonction qui s'occupe de dessiner les enfants de l'objet courant sous
  * forme de cercles
- * @param  {SVGClass} svg            Canvas SVG
+ * @param  {CanvasSVG} svg            Canvas SVG
  * @param  {int} nb_children    Nombre d'enfants
  * @param  {circle} current_object Cercle représentant l'objet courant
  */
@@ -320,11 +192,11 @@ $(document).ready(function() {
   // nb_siblings = parseInt($("#siblings").html());
   // nb_children = parseInt($("#children").html());
 
-  nb_parents = 2000;
-  nb_siblings = 8200;
-  nb_children = 9000;
+  nb_parents = 3;
+  nb_siblings = 102;
+  nb_children = 9;
 
-  var svg = new SVGClass($("#hierarchy"));
+  var svg = new CanvasSVG($("#hierarchy"));
 
   var smaller_parent = drawParents(svg, nb_parents);
   var current_object = drawCurrentObject(svg);
