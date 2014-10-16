@@ -109,6 +109,8 @@ function Circle(xc, yc, radius, hid) {
     shape.setAttributeNS(null, "stroke", this.getStrokeColor());
     shape.setAttributeNS(null, "stroke-width", this.getStrokeWidth());
     shape.setAttributeNS(null, "stroke-opacity", this.getStrokeOpacity());
+    shape.setAttributeNS(null, "class", this.hid); // classe CSS
+
     shape.appendChild(title);
     document.getElementById('hierarchy').appendChild(shape);
   };
