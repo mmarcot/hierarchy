@@ -6,24 +6,44 @@ svg {
   background-color: white;
 }
 
-circle:hover {
+.parent {
+  fill: #078E9D;
+  stroke: black;
+  stroke-width: 1;
+}
+.parent:hover {
   stroke: white;
 }
 
-.parent {
-
-}
 
 .sibling {
-
+  fill: black;
+  stroke: black;
+  stroke-width: 0;
 }
+.sibling:hover {
+  stroke-width: 1;
+  stroke: white;
+}
+
 
 .current {
+  fill: black;
+  stroke: white;
+  stroke-width: 3;
+}
+.current:hover {
 
 }
+
 
 .children {
-
+  fill: red;
+  stroke: black;
+  stroke-width: 0;
 }
-
+.children:hover {
+  stroke: white;
+  stroke-width: 1;
+}
 

@@ -26,61 +26,6 @@ function Circle(xc, yc, radius, hid) {
   };
 
   /**
-   * Fonction qui gère la couleur des cercles en fonction de leur grade
-   * hieratchique
-   * @return {String} La couleur
-   */
-  this.getFillcolor = function() {
-    if(this.hid === "parent")
-      return "#078E9D";
-    else if(this.hid === "sibling")
-      return "black";
-    else if(this.hid === "children")
-      return "red";
-    else if(this.hid === "current")
-      return "black";
-  };
-
-  /**
-   * @return {float} The fill opacity
-   */
-  this.getFillOpacity = function() {
-    return 1;
-  };
-
-  /**
-   * @return {String} The stroke color
-   */
-  this.getStrokeColor = function() {
-    if(this.hid === "current")
-      return "white";
-    else
-      return "black";
-  };
-
-  /**
-   * @return {int} The stroke width
-   */
-  this.getStrokeWidth = function() {
-    if(this.hid === "children" && nb_children > 70)
-      return 0;
-    else if(this.hid === "current")
-      return 3;
-    else
-      return 1;
-  };
-
-  /**
-   * @return {int} The stroke opacity
-   */
-  this.getStrokeOpacity = function() {
-    if(this.hid === "parent")
-      return 0.6;
-    else
-      return 1;
-  };
-
-  /**
    * @return {string} The tooltip text
    */
   this.getTooltipText = function() {
@@ -104,11 +49,6 @@ function Circle(xc, yc, radius, hid) {
     shape.setAttributeNS(null, "cx", this.xc);
     shape.setAttributeNS(null, "cy", this.yc);
     shape.setAttributeNS(null, "r", this.radius);
-    shape.setAttributeNS(null, "fill", this.getFillcolor());
-    shape.setAttributeNS(null, "fill-opacity", this.getFillOpacity());
-    shape.setAttributeNS(null, "stroke", this.getStrokeColor());
-    shape.setAttributeNS(null, "stroke-width", this.getStrokeWidth());
-    shape.setAttributeNS(null, "stroke-opacity", this.getStrokeOpacity());
     shape.setAttributeNS(null, "class", this.hid); // classe CSS
 
     shape.appendChild(title);
