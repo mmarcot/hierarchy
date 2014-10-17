@@ -55,18 +55,55 @@ function Circle(xc, yc, radius, hid) {
 
   /**
    * Fonction qui permet de dessiner le cercle
+   * @param {Circle} current_object Le cercle représentant l'objet courant
    */
-  this.draw = function() {
+  this.draw = function(current_object) {
+    // création du titre :
     var title = document.createElementNS("http://www.w3.org/2000/svg", "title");
     title.textContent = this.getTooltipText();
+
+    // animation rayon :
+    var anim_radius = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+    anim_radius.setAttributeNS(null, "attributeName", "r");
+    anim_radius.setAttributeNS(null, "attributeType", "XML");
+    anim_radius.setAttributeNS(null, "from", this.radius);
+    anim_radius.setAttributeNS(null, "to", "130");
+    anim_radius.setAttributeNS(null, "begin", "click");
+    anim_radius.setAttributeNS(null, "dur", "1s");
+
+    // animation x :
+    var anim_x = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+    anim_x.setAttributeNS(null, "attributeName", "cx");
+    anim_x.setAttributeNS(null, "attributeType", "XML");
+    anim_x.setAttributeNS(null, "from", this.xc);
+    anim_x.setAttributeNS(null, "to", "300"); // TODO CHANGE
+    anim_x.setAttributeNS(null, "begin", "click");
+    anim_x.setAttributeNS(null, "dur", "1s");
+
+    // animation y :
+    var anim_y = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+    anim_y.setAttributeNS(null, "attributeName", "cy");
+    anim_y.setAttributeNS(null, "attributeType", "XML");
+    anim_y.setAttributeNS(null, "from", this.yc);
+    anim_y.setAttributeNS(null, "to", "300"); //TODO CHANGE !!!!!!!!!!!!!!!!!!!
+    anim_y.setAttributeNS(null, "begin", "click");
+    anim_y.setAttributeNS(null, "dur", "1s");
+
+    // création du cercle :
     var shape = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     shape.setAttributeNS(null, "cx", this.xc);
     shape.setAttributeNS(null, "cy", this.yc);
     shape.setAttributeNS(null, "r", this.radius);
     shape.setAttributeNS(null, "class", this.hid); // classe CSS
-    shape.setAttributeNS(null, "onclick", "location.href='" + this.getTargetUrl() + "'");
+    //shape.setAttributeNS(null, "onclick", "location.href='" + this.getTargetUrl() + "'");
 
+    // on ajoute le titre et les animations du cercle :
     shape.appendChild(title);
+    shape.appendChild(anim_radius);
+    shape.appendChild(anim_x);
+    shape.appendChild(anim_y);
+
+    // on ajoute le cercle dans le canvas :
     document.getElementById('hierarchy').appendChild(shape);
   };
 }
