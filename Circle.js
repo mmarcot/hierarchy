@@ -94,7 +94,8 @@ function Circle(xc, yc, radius, hid) {
     shape.setAttributeNS(null, "cy", this.yc);
     shape.setAttributeNS(null, "r", this.radius);
     shape.setAttributeNS(null, "class", this.hid); // classe CSS
-    //shape.setAttributeNS(null, "onclick", "location.href='" + this.getTargetUrl() + "'");
+    if(this.hid !== "current")
+      shape.setAttributeNS(null, "onclick", "doClic()");
 
     // on ajoute le titre et les animations du cercle :
     shape.appendChild(title);

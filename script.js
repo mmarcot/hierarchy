@@ -191,6 +191,16 @@ function drawText(x, y, color, texte) {
 }
 
 
+/**
+ * Fonction qui execute les instructions à réaliser lors d'un clic sur un cercle
+ */
+function doClic() {
+  // lorsque l'animation est terminée on redirige vers le bon lien :
+  setTimeout(function() {
+    location.href = "http://www.google.fr";
+  }, 980);
+}
+
 
 $(document).ready(function() {
   // NB_PARENTS = parseInt($("#parents").html());
@@ -229,11 +239,6 @@ $(document).ready(function() {
   CURRENT_OBJECT.draw();
   drawSiblings(svg_agrandi, smaller_parent);
   drawChildren(svg_agrandi);
-
-  // on suit un URL lors d'un click sur un cercle :
-  $(".parent, .sibling, .children").click(function() {
-    setTimeout(function(){location.href = "http://www.google.fr";}, 980);
-  });
 
   // drawText(svg_agrandi.width*5.4/10, svg_agrandi.height*3.5/10, "white", "This");
   // drawText(svg_agrandi.width*6.8/10, svg_agrandi.height*2/10, "white", "Siblings");
