@@ -6,6 +6,11 @@ svg {
   background-color: white;
 }
 
+text {
+  text-anchor: middle;
+  /*font-size: 12px;*/
+}
+
 .parent {
   fill: #078E9D;
   stroke: black;

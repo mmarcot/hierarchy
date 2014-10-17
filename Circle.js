@@ -40,6 +40,20 @@ function Circle(xc, yc, radius, hid) {
   };
 
   /**
+   * @return {String} L'url à suivre lors d'un clic sur le cercle
+   */
+  this.getTargetUrl = function() {
+    if(this.hid === "parent")
+      return "http://www.google.fr";
+    else if(this.hid === "sibling")
+      return "http://www.google.fr";
+    else if(this.hid === "children")
+      return "http://www.google.fr";
+    else if(this.hid === "current")
+      return "http://www.google.fr";
+  };
+
+  /**
    * Fonction qui permet de dessiner le cercle
    */
   this.draw = function() {
@@ -50,6 +64,7 @@ function Circle(xc, yc, radius, hid) {
     shape.setAttributeNS(null, "cy", this.yc);
     shape.setAttributeNS(null, "r", this.radius);
     shape.setAttributeNS(null, "class", this.hid); // classe CSS
+    shape.setAttributeNS(null, "onclick", "location.href='" + this.getTargetUrl() + "'");
 
     shape.appendChild(title);
     document.getElementById('hierarchy').appendChild(shape);
