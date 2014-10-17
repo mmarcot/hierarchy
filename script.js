@@ -243,8 +243,8 @@ $(document).ready(function() {
   drawSiblings(svg_agrandi, nb_siblings, smaller_parent, current_object);
   drawChildren(svg_agrandi, nb_children, current_object);
 
-  drawText(svg_agrandi.width*5.4/10, svg_agrandi.height*3.5/10, "white", "This");
-  drawText(svg_agrandi.width*6.8/10, svg_agrandi.height*2/10, "white", "Siblings");
-  drawText(svg_agrandi.width*1/10, svg_agrandi.height*1/10, "black", "Parents");
-  //drawText(svg_agrandi.width*5/10, svg_agrandi.height*6/10, "white", "Children");
+  // drawText(svg_agrandi.width*5.4/10, svg_agrandi.height*3.5/10, "white", "This");
+  // drawText(svg_agrandi.width*6.8/10, svg_agrandi.height*2/10, "white", "Siblings");
+  // drawText(svg_agrandi.width*1/10, svg_agrandi.height*1/10, "black", "Parents");
+  // drawText(svg_agrandi.width*5/10, svg_agrandi.height*6/10, "white", "Children");
 });
