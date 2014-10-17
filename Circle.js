@@ -54,7 +54,7 @@ function Circle(xc, yc, radius, hid) {
   };
 
   /**
-   * Fonction qui permet de dessiner le cercle
+   * Methode qui permet de dessiner le cercle
    */
   this.draw = function() {
     // création du titre :
