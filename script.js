@@ -39,19 +39,18 @@ function drawCurrentObject(smaller_parent) {
 /**
  * Fonction qui dessine les parents sous forme de cercle
  * @param  {CanvasSVG} svg        L'objet svg
- * @param  {int} nb_parents Le nombre de parent de l'objet courant
  * @return {Circle}   Le plus petit cercle des parents
  */
-function drawParents(svg, nb_parents, ecart) {
+function drawParents(svg, ecart) {
   var parent;
 
   // cas particulier :
-  if(nb_parents === 0) {
+  if(NB_PARENTS === 0) {
     parent = new Circle(svg.x_centre, svg.y_centre, svg.cote_min/2, "parent");
   }
 
   // boucle de placage 1 à 1 :
-  for (var i = 0; i < nb_parents; i++) {
+  for (var i = 0; i < NB_PARENTS; i++) {
     parent = new Circle( svg.x_centre + i * ecart,
                          svg.y_centre + i * ecart,
                          svg.cote_min/2,
@@ -68,22 +67,21 @@ function drawParents(svg, nb_parents, ecart) {
 /**
  * Fonction qui s'occupe de déssiner les siblings
  * @param  {CanvasSVG} svg            Le canvas svg
- * @param  {int} nb_siblings    Le nombre de siblings à dessiner
  * @param  {Circle} smaller_parent Le cercle représentant le plus petit des parents
  * @param  {Circle} current_object Le cercle représentant l'objet courant
  */
-function drawSiblings(svg, nb_siblings, smaller_parent, current_object) {
+function drawSiblings(svg, smaller_parent, current_object) {
   var tab_s = [];
   var placer = 0;
   var cpt_colli = 0;
 
   // boucle qui place les siblings 1 à 1 :
-  while(placer < nb_siblings && cpt_colli < 70) {
+  while(placer < NB_SIBLINGS && cpt_colli < 70) {
     var x_random = Math.random() * svg.width;
     var y_random = Math.random()* svg.height;
 
     // on met la taille des cercles à l'échelle par rapport au canvas :
-    var rayon_siblings = 6 + scaleCircleSize(nb_siblings, "sibling");
+    var rayon_siblings = 6 + scaleCircleSize(NB_SIBLINGS, "sibling");
     rayon_siblings *= Math.min(svg.width, svg.height)/500;
 
     // si c'est dans la bonne "portion" de cercle :
@@ -159,21 +157,20 @@ function scaleCircleSize(nb, hid) {
  * Fonction qui s'occupe de dessiner les enfants de l'objet courant sous
  * forme de cercles
  * @param  {CanvasSVG} svg            Canvas SVG
- * @param  {int} nb_children    Nombre d'enfants
  * @param  {circle} current_object Cercle représentant l'objet courant
  */
-function drawChildren(svg, nb_children, current_object) {
+function drawChildren(svg, current_object) {
   var tab_c = [];
   var placer = 0;
   var cpt_colli = 0;
 
-  while(placer < nb_children && cpt_colli < 50) {
+  while(placer < NB_CHILDREN && cpt_colli < 50) {
     // on tire les coordonées au sort :
     var x_random = Math.random() * (current_object.radius*2) + current_object.xc-current_object.radius;
     var y_random = Math.random() * (current_object.radius*2) + current_object.yc-current_object.radius;
 
     // on calcul le rayon des children :
-    var rayon_children = 3 + scaleCircleSize(nb_children, "children");
+    var rayon_children = 3 + scaleCircleSize(NB_CHILDREN, "children");
     rayon_children = rayon_children * Math.min(svg.width, svg.height)/500;
 
     // si c'est contenu dans le current :
@@ -214,15 +211,15 @@ function drawText(x, y, color, texte) {
 
 
 $(document).ready(function() {
-  // nb_parents = parseInt($("#parents").html());
-  // nb_siblings = parseInt($("#siblings").html());
-  // nb_children = parseInt($("#children").html());
+  // NB_PARENTS = parseInt($("#parents").html());
+  // NB_SIBLINGS = parseInt($("#siblings").html());
+  // NB_CHILDREN = parseInt($("#children").html());
 
-  nb_parents = 10;
-  if(nb_parents > 5)
-    nb_parents = 5;
-  nb_siblings = 10;
-  nb_children = 9;
+  NB_PARENTS = 10;
+  if(NB_PARENTS > 5)
+    NB_PARENTS = 5;
+  NB_SIBLINGS = 10;
+  NB_CHILDREN = 9;
 
   var ecart_entre_parents = 3;
 
@@ -233,15 +230,15 @@ $(document).ready(function() {
   var svg_depart = new CanvasSVG($("#hierarchy"));
 
   // on agrandi le canvas pour caser tous les parents :
-  $("#hierarchy").attr("width", svg_width + nb_parents * ecart_entre_parents);
-  $("#hierarchy").attr("height", svg_height + nb_parents * ecart_entre_parents);
+  $("#hierarchy").attr("width", svg_width + NB_PARENTS * ecart_entre_parents);
+  $("#hierarchy").attr("height", svg_height + NB_PARENTS * ecart_entre_parents);
 
   var svg_agrandi = new CanvasSVG($("#hierarchy"));
 
-  var smaller_parent = drawParents(svg_depart, nb_parents, ecart_entre_parents);
+  var smaller_parent = drawParents(svg_depart, ecart_entre_parents);
   var current_object = drawCurrentObject(smaller_parent);
-  drawSiblings(svg_agrandi, nb_siblings, smaller_parent, current_object);
-  drawChildren(svg_agrandi, nb_children, current_object);
+  drawSiblings(svg_agrandi, smaller_parent, current_object);
+  drawChildren(svg_agrandi, current_object);
 
   // drawText(svg_agrandi.width*5.4/10, svg_agrandi.height*3.5/10, "white", "This");
   // drawText(svg_agrandi.width*6.8/10, svg_agrandi.height*2/10, "white", "Siblings");
