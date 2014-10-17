@@ -194,10 +194,11 @@ function drawText(x, y, color, texte) {
 /**
  * Fonction qui execute les instructions à réaliser lors d'un clic sur un cercle
  */
-function doClic() {
+function doClick() {
   // lorsque l'animation est terminée on redirige vers le bon lien :
   setTimeout(function() {
-    location.href = "http://www.google.fr";
+    alert("redirect");
+    // location.href = "http://www.google.fr";
   }, 980);
 }
 
