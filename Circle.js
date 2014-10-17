@@ -55,9 +55,8 @@ function Circle(xc, yc, radius, hid) {
 
   /**
    * Fonction qui permet de dessiner le cercle
-   * @param {Circle} current_object Le cercle représentant l'objet courant
    */
-  this.draw = function(current_object) {
+  this.draw = function() {
     // création du titre :
     var title = document.createElementNS("http://www.w3.org/2000/svg", "title");
     title.textContent = this.getTooltipText();
@@ -67,7 +66,7 @@ function Circle(xc, yc, radius, hid) {
     anim_radius.setAttributeNS(null, "attributeName", "r");
     anim_radius.setAttributeNS(null, "attributeType", "XML");
     anim_radius.setAttributeNS(null, "from", this.radius);
-    anim_radius.setAttributeNS(null, "to", "130");
+    anim_radius.setAttributeNS(null, "to", CURRENT_OBJECT.radius);
     anim_radius.setAttributeNS(null, "begin", "click");
     anim_radius.setAttributeNS(null, "dur", "1s");
 
@@ -76,7 +75,7 @@ function Circle(xc, yc, radius, hid) {
     anim_x.setAttributeNS(null, "attributeName", "cx");
     anim_x.setAttributeNS(null, "attributeType", "XML");
     anim_x.setAttributeNS(null, "from", this.xc);
-    anim_x.setAttributeNS(null, "to", "300"); // TODO CHANGE
+    anim_x.setAttributeNS(null, "to", CURRENT_OBJECT.xc);
     anim_x.setAttributeNS(null, "begin", "click");
     anim_x.setAttributeNS(null, "dur", "1s");
 
@@ -85,7 +84,7 @@ function Circle(xc, yc, radius, hid) {
     anim_y.setAttributeNS(null, "attributeName", "cy");
     anim_y.setAttributeNS(null, "attributeType", "XML");
     anim_y.setAttributeNS(null, "from", this.yc);
-    anim_y.setAttributeNS(null, "to", "300"); //TODO CHANGE !!!!!!!!!!!!!!!!!!!
+    anim_y.setAttributeNS(null, "to", CURRENT_OBJECT.yc);
     anim_y.setAttributeNS(null, "begin", "click");
     anim_y.setAttributeNS(null, "dur", "1s");
 

@@ -21,22 +21,6 @@ function isCollision(tab, x_random, y_random, rayon) {
 
 
 /**
- * Fonction qui déssine l'objet courant sous forme de cercle SVG
- * @param  {Circle} smaller_parent Le plus petit parent
- * @return {Circle}   Les dimensions du cercle représentant l'objet courant
- */
-function drawCurrentObject(smaller_parent) {
-  var coef = 0.4;
-  var current_object = new Circle(smaller_parent.xc, smaller_parent.yc, smaller_parent.radius*coef, "current");
-
-  current_object.draw();
-
-  return current_object;
-}
-
-
-
-/**
  * Fonction qui dessine les parents sous forme de cercle
  * @param  {CanvasSVG} svg        L'objet svg
  * @return {Circle}   Le plus petit cercle des parents
@@ -68,9 +52,8 @@ function drawParents(svg, ecart) {
  * Fonction qui s'occupe de déssiner les siblings
  * @param  {CanvasSVG} svg            Le canvas svg
  * @param  {Circle} smaller_parent Le cercle représentant le plus petit des parents
- * @param  {Circle} current_object Le cercle représentant l'objet courant
  */
-function drawSiblings(svg, smaller_parent, current_object) {
+function drawSiblings(svg, smaller_parent) {
   var tab_s = [];
   var placer = 0;
   var cpt_colli = 0;
@@ -86,7 +69,7 @@ function drawSiblings(svg, smaller_parent, current_object) {
 
     // si c'est dans la bonne "portion" de cercle :
     if(smaller_parent.contains(x_random, y_random, -rayon_siblings) &&
-      !current_object.contains(x_random, y_random, +rayon_siblings) ) {
+      !CURRENT_OBJECT.contains(x_random, y_random, +rayon_siblings) ) {
 
       // .. et si il n'y a pas de collision avec les autres siblings :
       if( !isCollision(tab_s, x_random, y_random, rayon_siblings) ) {
@@ -157,24 +140,23 @@ function scaleCircleSize(nb, hid) {
  * Fonction qui s'occupe de dessiner les enfants de l'objet courant sous
  * forme de cercles
  * @param  {CanvasSVG} svg            Canvas SVG
- * @param  {circle} current_object Cercle représentant l'objet courant
  */
-function drawChildren(svg, current_object) {
+function drawChildren(svg) {
   var tab_c = [];
   var placer = 0;
   var cpt_colli = 0;
 
   while(placer < NB_CHILDREN && cpt_colli < 50) {
     // on tire les coordonées au sort :
-    var x_random = Math.random() * (current_object.radius*2) + current_object.xc-current_object.radius;
-    var y_random = Math.random() * (current_object.radius*2) + current_object.yc-current_object.radius;
+    var x_random = Math.random() * (CURRENT_OBJECT.radius*2) + CURRENT_OBJECT.xc-CURRENT_OBJECT.radius;
+    var y_random = Math.random() * (CURRENT_OBJECT.radius*2) + CURRENT_OBJECT.yc-CURRENT_OBJECT.radius;
 
     // on calcul le rayon des children :
     var rayon_children = 3 + scaleCircleSize(NB_CHILDREN, "children");
     rayon_children = rayon_children * Math.min(svg.width, svg.height)/500;
 
     // si c'est contenu dans le current :
-    if(current_object.contains(x_random, y_random, -rayon_children) ) {
+    if(CURRENT_OBJECT.contains(x_random, y_random, -rayon_children) ) {
 
       // ..et pas de collision :
       if( !isCollision(tab_c, x_random, y_random, rayon_children) ) {
@@ -222,23 +204,30 @@ $(document).ready(function() {
   NB_CHILDREN = 9;
 
   var ecart_entre_parents = 3;
+  var coef_taille_current = 0.4;
 
   // on récupère les dimensions initiale du canvas :
   var svg_width = parseInt($("#hierarchy").attr("width"));
   var svg_height = parseInt($("#hierarchy").attr("height"));
-
   var svg_depart = new CanvasSVG($("#hierarchy"));
 
   // on agrandi le canvas pour caser tous les parents :
   $("#hierarchy").attr("width", svg_width + NB_PARENTS * ecart_entre_parents);
   $("#hierarchy").attr("height", svg_height + NB_PARENTS * ecart_entre_parents);
-
   var svg_agrandi = new CanvasSVG($("#hierarchy"));
 
-  var smaller_parent = drawParents(svg_depart, ecart_entre_parents);
-  var current_object = drawCurrentObject(smaller_parent);
-  drawSiblings(svg_agrandi, smaller_parent, current_object);
-  drawChildren(svg_agrandi, current_object);
+  // on instancie le plus petit parent et l'objet courant
+  var smaller_parent = new Circle( svg_depart.x_centre + (NB_PARENTS-1) * ecart_entre_parents,
+                                   svg_depart.y_centre + (NB_PARENTS-1)  * ecart_entre_parents,
+                                   svg_depart.cote_min/2,
+                                   "parent" );
+  CURRENT_OBJECT = new Circle(smaller_parent.xc, smaller_parent.yc, smaller_parent.radius*coef_taille_current, "current");
+
+  // on dessine le tout :
+  drawParents(svg_depart, ecart_entre_parents);
+  CURRENT_OBJECT.draw();
+  drawSiblings(svg_agrandi, smaller_parent);
+  drawChildren(svg_agrandi);
 
   // drawText(svg_agrandi.width*5.4/10, svg_agrandi.height*3.5/10, "white", "This");
   // drawText(svg_agrandi.width*6.8/10, svg_agrandi.height*2/10, "white", "Siblings");
