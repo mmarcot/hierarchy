@@ -94,8 +94,15 @@ function Circle(xc, yc, radius, hid) {
     shape.setAttributeNS(null, "cy", this.yc);
     shape.setAttributeNS(null, "r", this.radius);
     shape.setAttributeNS(null, "class", this.hid); // classe CSS
-    if(this.hid !== "current")
-      shape.setAttributeNS(null, "onclick", "doClick()");
+    if(this.hid !== "current") {
+      shape.addEventListener("click", function() {
+        // lorsque l'animation est terminée on redirige vers le bon lien :
+        setTimeout(function() {
+          alert("redirect");
+          // location.href = "http://www.google.fr";
+        }, 980);
+      });
+    }
 
     // on ajoute le titre et les animations du cercle :
     shape.appendChild(title);

@@ -191,26 +191,13 @@ function drawText(x, y, color, texte) {
 }
 
 
-/**
- * Fonction qui execute les instructions à réaliser lors d'un clic sur un cercle
- */
-function doClick() {
-  // lorsque l'animation est terminée on redirige vers le bon lien :
-  setTimeout(function() {
-    alert("redirect");
-    // location.href = "http://www.google.fr";
-  }, 980);
-}
-
 
 $(document).ready(function() {
   // NB_PARENTS = parseInt($("#parents").html());
   // NB_SIBLINGS = parseInt($("#siblings").html());
   // NB_CHILDREN = parseInt($("#children").html());
 
-  NB_PARENTS = 10;
-  if(NB_PARENTS > 5)
-    NB_PARENTS = 5;
+  NB_PARENTS = 6;
   NB_SIBLINGS = 10;
   NB_CHILDREN = 9;
 
